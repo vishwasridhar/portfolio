@@ -597,6 +597,12 @@ function boot() {
   gsap.registerPlugin(ScrollTrigger, Draggable);
   gsap.defaults({ ease: 'power4.out', duration: 1 });
   render();
+  // cursor ribbons in the portfolio's coral / peach palette
+  window.Ribbons?.init({
+    colors: ['#FF8066', '#F2664A', '#FFB199'],
+    thickness: 30, length: 1.4, shape: 'lens', spread: 18,
+    stiffness: 0.5, bounce: 0.5, wave: 0, softness: 0, opacity: 1, fade: false,
+  });
   startScroll();
   initNav();
   initHero();
