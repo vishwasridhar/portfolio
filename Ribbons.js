@@ -96,7 +96,7 @@ void main() {
 
   function init(options = {}) {
     const o = Object.assign({
-      colors: ['#FF8066', '#F2664A', '#FFB199'],
+      colors: ['#ffffff', '#a3a9b1', '#d9dde3'],
       thickness: 30, length: 1.4, spread: 18, stiffness: 0.5, bounce: 0.5,
       shape: 'lens', wave: 0, softness: 0, fade: false, opacity: 1, zIndex: 150,
     }, options);

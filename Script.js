@@ -41,7 +41,7 @@ const DATA = {
         { label: 'Live demo', url: 'https://vishwasridhar.github.io/MernPortfolio/' },
         { label: 'Source code', url: 'https://github.com/vishwasridhar/MernPortfolio' },
       ],
-      color: '#FFE5D9',
+      color: '#1a1b1e',
     },
     {
       title: 'Tour Booking Design', tag: 'Front-end · Personal project, 2026', visual: 'tour',
@@ -51,7 +51,7 @@ const DATA = {
         { label: 'Live demo', url: 'https://vishwasridhar.github.io/Tour-Booking-Design/' },
         { label: 'Source code', url: 'https://github.com/vishwasridhar/Tour-Booking-Design' },
       ],
-      color: '#FFD9CC',
+      color: '#1d1e21',
     },
     {
       title: 'PixelCraft Digital Agency', tag: 'Web design · Front-end', visual: 'agency',
@@ -61,7 +61,7 @@ const DATA = {
         { label: 'Live demo', url: 'https://vishwasridhar.github.io/Pixel-craft-digital-agency/' },
         { label: 'Source code', url: 'https://github.com/vishwasridhar/Pixel-craft-digital-agency' },
       ],
-      color: '#FFEDE5',
+      color: '#17181a',
     },
   ],
 
@@ -133,10 +133,11 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 
 const SQUIGGLE = '<svg class="squiggle" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 C 30 2, 50 24, 80 12 S 130 2, 160 13 S 215 24, 245 11 S 285 4, 298 12" pathLength="1" /></svg>';
 
+const DARK_BRANDS = new Set(['#0A0A0A', '#181717', '#000000']);
 function brandSVG(name, size = 22) {
   const b = BRANDS[name];
   if (!b) return '';
-  return `<svg class="brand" width="${size}" height="${size}" viewBox="0 0 24 24" role="img" aria-label="${esc(b.title)}"><path d="${b.path}" fill="${b.hex}" /></svg>`;
+  return `<svg class="brand" width="${size}" height="${size}" viewBox="0 0 24 24" role="img" aria-label="${esc(b.title)}"><path d="${b.path}" fill="${DARK_BRANDS.has(b.hex) ? '#ffffff' : b.hex}" /></svg>`;
 }
 
 function odometer(value) {
@@ -189,13 +190,7 @@ function art(kind, cells) {
 /* ═════════ Render lists from DATA ═════════ */
 function render() {
   // squiggles under highlighted words + the hero name
-  $$('.hl, .hr-name').forEach((el) => el.insertAdjacentHTML('beforeend', SQUIGGLE));
-
-  // hero: split the name into letters so they can slide up one by one
-  const nameEl = $('.hr-name-text');
-  const name = nameEl.textContent.trim();
-  nameEl.setAttribute('aria-label', name);
-  nameEl.innerHTML = name.split('').map((c) => `<span class="ch-mask" aria-hidden="true"><span class="ch">${esc(c)}</span></span>`).join('');
+  $$('.hl').forEach((el) => el.insertAdjacentHTML('beforeend', SQUIGGLE));
 
   $('#hero-counts').innerHTML = DATA.heroCounts.map((c) => `<li><b>${esc(c.value)}</b><span>${esc(c.label)}</span></li>`).join('');
   $('#about-stats').innerHTML = DATA.about.stats.map((s) => `<div class="ab-stat"><b>${esc(s.value)}</b><span>${esc(s.label)}</span></div>`).join('');
@@ -329,8 +324,7 @@ function initLoader(onFinish) {
 function playHeroIntro() {
   gsap.timeline()
     .from('.hr-hello', { y: 20, opacity: 0, duration: 0.8 })
-    .from('.hr-name .ch', { yPercent: 110, rotate: 8, stagger: 0.05, duration: 1.1 }, 0.1)
-    .to('.hr-name .squiggle path', { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut' }, 0.6)
+    .from('.hr-name', { y: 30, opacity: 0, duration: 1.1 }, 0.1)
     .from('.hr-sub, .hr-counts, .hr-ctas', { y: 30, opacity: 0, stagger: 0.1, duration: 1 }, 0.4)
     .from('.hr-blob', { scale: 0.6, opacity: 0, duration: 1.4, ease: 'elastic.out(1, 0.7)' }, 0.1)
     .from('.hr-person', { yPercent: 30, opacity: 0, duration: 1.2, ease: 'back.out(1.4)' }, 0.3)
@@ -562,7 +556,7 @@ function initMilestones() {
     gsap.to(p, { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut', scrollTrigger: { trigger: p, start: 'top 85%' } }));
   gsap.from('.cert-frame', { y: 50, rotate: (i) => (i % 2 ? 8 : -8), opacity: 0, stagger: 0.06, duration: 0.9, ease: 'back.out(1.6)', scrollTrigger: { trigger: '.ms-wall', start: 'top 85%' } });
 
-  // stats: fade up, digits roll into place, a coral line draws underneath
+  // stats: fade up, digits roll into place, a metallic line draws underneath
   const tl = gsap.timeline({ scrollTrigger: { trigger: '.nums', start: 'top 82%' } });
   tl.from('.num-cell', { y: 40, opacity: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out' });
   $$('.nums .odo-col').forEach((col, i) => {
@@ -592,14 +586,218 @@ function initContact() {
   });
 }
 
+/* ═════════ Hero name: liquid-metal text ═════════ */
+function initHeroMetal() {
+  const h1 = $('#hero-name');
+  const host = $('#hero-metal');
+  if (!h1 || !host || !window.MetallicPaint) return;
+  h1.classList.add('metal-on');
+  const metal = window.MetallicPaint.init(host, {
+    text: 'Vishwa',
+    fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
+    fontWeight: 800,
+    color: '#ffffff',
+    density: 2, softness: 0.1, dispersion: 0.3, distortion: 0.07, edgeBend: 0.6,
+    angle: 70, scale: 0.95, speed: 1, mouseTilt: 0.5, intro: true,
+    onError: () => h1.classList.remove('metal-on'), // falls back to plain white text
+  });
+  if (!metal) h1.classList.remove('metal-on');
+}
+
+/* ═════════ Metallic headings ═════════
+   Every heading that used the CSS "metal" gradient (.h2 / .hl) is now drawn with the very same
+   WebGL liquid-metal shader as the hero "Vishwa": chrome bands, red/blue dispersion on the edges,
+   a slow flowing shimmer and a tilt that follows the cursor. Each heading is word-wrapped here,
+   rendered to its own canvas, and falls back to the old CSS gradient if WebGL2 isn't available. */
+const METAL_LOOK = {
+  color: '#ffffff', density: 2, softness: 0.1, dispersion: 0.3, distortion: 0.07, edgeBend: 0.6,
+  angle: 70, speed: 1, mouseTilt: 0.5, scale: 1,
+};
+const METAL_LINE_HEIGHT = 0.98; // same as the .h2 line-height in style.css
+const METAL_SPACING = -0.02;    // em; a little tighter, like the CSS headings
+
+function initMetalHeadings() {
+  const MP = window.MetallicPaint;
+  const heads = $$('.h2');
+  if (!MP || !MP.measureText || !heads.length) return;
+  try {
+    const gl = document.createElement('canvas').getContext('webgl2');
+    if (!gl) return;
+    gl.getExtension('WEBGL_lose_context')?.loseContext();
+  } catch { return; }
+
+  const ruler = document.createElement('canvas').getContext('2d');
+  const refresh = () => window.ScrollTrigger && ScrollTrigger.refresh();
+
+  const items = heads.map((h) => {
+    // 1. read the heading: words, which of them are highlighted (.hl), forced line breaks (<br>)
+    const tokens = [];
+    const walk = (node, hl) => node.childNodes.forEach((n) => {
+      if (n.nodeType === 3) n.textContent.split(/\s+/).filter(Boolean).forEach((w) => tokens.push({ w, hl }));
+      else if (n.nodeName === 'BR') tokens.push({ br: true });
+      else if (n.nodeType === 1 && !n.classList.contains('squiggle')) walk(n, hl || n.classList.contains('hl'));
+    });
+    walk(h, false);
+    // a highlighted phrase never breaks across lines (it was an inline-block before)
+    const groups = [];
+    tokens.forEach((t) => {
+      const last = groups[groups.length - 1];
+      if (!t.br && t.hl && last && last.hl && !last.br) last.w += ' ' + t.w;
+      else groups.push({ ...t });
+    });
+
+    // 2. keep the real text for screen readers / SEO, add the canvas host
+    const sr = document.createElement('span');
+    sr.className = 'mh-sr';
+    while (h.firstChild) sr.appendChild(h.firstChild);
+    const host = document.createElement('span');
+    host.className = 'mh-host';
+    host.setAttribute('aria-hidden', 'true');
+    h.append(sr, host);
+    const hlEl = $('.hl', sr);
+    const squiggle = hlEl ? $('.squiggle', hlEl) : null;
+    if (squiggle) h.appendChild(squiggle); // same node, so the scroll-draw animation keeps working
+    h.classList.add('mh-on');
+    return { h, groups, sr, host, hlEl, squiggle, inst: null, key: '', seen: false, started: false, reverted: false };
+  });
+
+  const revert = (it) => {
+    if (it.reverted) return;
+    it.reverted = true;
+    it.inst?.destroy?.();
+    it.inst = null;
+    it.h.classList.remove('mh-on');
+    while (it.sr.firstChild) it.h.insertBefore(it.sr.firstChild, it.sr);
+    it.sr.remove();
+    it.host.remove();
+    if (it.squiggle && it.hlEl) {
+      it.squiggle.removeAttribute('style');
+      it.hlEl.appendChild(it.squiggle);
+    }
+    refresh();
+  };
+
+  const start = (it) => {
+    if (it.inst || it.reverted || !it.layout) return;
+    const L = it.layout;
+    it.inst = MP.init(it.host, {
+      ...METAL_LOOK, text: L.text, fontFamily: L.family, fontWeight: L.weight,
+      align: L.align, lineHeight: METAL_LINE_HEIGHT, letterSpacing: METAL_SPACING,
+      intro: !it.started, onError: () => revert(it),
+    });
+    it.started = true;
+    if (!it.inst) revert(it);
+  };
+
+  // 3. word-wrap to the available width, size the canvas so the text lands at the CSS font size
+  const layout = async (it) => {
+    const cs = getComputedStyle(it.h);
+    const fs = parseFloat(cs.fontSize);
+    const family = cs.fontFamily;
+    const weight = cs.fontWeight;
+    const align = cs.textAlign === 'center' ? 'center' : 'left';
+    // room for the heading: the whole header block, minus any flex siblings beside it (e.g. the Toolbox note + button)
+    const box = it.h.closest('.sec-head, .ab-copy, .ct-copy') || it.h.parentElement;
+    const bcs = getComputedStyle(box);
+    let avail = box.clientWidth - parseFloat(bcs.paddingLeft) - parseFloat(bcs.paddingRight);
+    if (bcs.display === 'flex') {
+      const mine = it.h.closest('.sec-head > *') || it.h;
+      const gap = parseFloat(bcs.columnGap) || 0;
+      avail -= [...box.children].filter((c) => c !== mine).reduce((a, c) => a + c.getBoundingClientRect().width + gap, 0);
+    }
+
+    ruler.font = `${weight} ${fs}px ${family}`;
+    if ('letterSpacing' in ruler) ruler.letterSpacing = `${METAL_SPACING * fs}px`;
+    const adv = (t) => ruler.measureText(t).width;
+    const space = adv(' ');
+    const lines = [[]];
+    let used = 0;
+    it.groups.forEach((g) => {
+      if (g.br) { lines.push([]); used = 0; return; }
+      const cur = lines[lines.length - 1];
+      const w = adv(g.w);
+      if (cur.length && used + space + w > avail) { lines.push([g]); used = w; }
+      else { cur.push(g); used += (cur.length > 1 ? space : 0) + w; }
+    });
+    const rows = lines.filter((l) => l.length);
+    const text = rows.map((l) => l.map((g) => g.w).join(' ')).join('\n');
+
+    const m = await MP.measureText(text, family, weight, { align, lineHeight: METAL_LINE_HEIGHT, letterSpacing: METAL_SPACING });
+    if (!m) return false;
+    const k = fs / m.size;
+    it.host.style.width = `${m.width * k}px`;
+    it.host.style.height = `${m.height * k}px`;
+    it.host.style.margin = `${-m.pad * k}px`;
+
+    // silver squiggle under the highlighted words
+    if (it.squiggle) {
+      const li = rows.findIndex((l) => l.some((g) => g.hl));
+      if (li >= 0) {
+        const line = rows[li];
+        const gi = line.findIndex((g) => g.hl);
+        const before = line.slice(0, gi).map((g) => g.w).join(' ');
+        const x0 = (align === 'center' ? (m.inkMax - m.rows[li].ink) / 2 * k : 0) + (before ? adv(before + ' ') : 0);
+        const w = adv(line[gi].w);
+        it.squiggle.style.left = `${x0 - w * 0.02}px`;
+        it.squiggle.style.width = `${w * 1.04}px`;
+        it.squiggle.style.top = `${(m.ascent + li * m.step) * k + fs * 0.14}px`;
+      }
+    }
+
+    const key = `${text}|${Math.round(fs)}|${align}|${family}`;
+    const changed = key !== it.key;
+    it.key = key;
+    it.layout = { text, family, weight, align };
+    if (changed && it.inst) { it.inst.destroy(); it.inst = null; if (it.seen) start(it); }
+    return true;
+  };
+
+  const layoutAll = async () => {
+    for (const it of items) {
+      if (it.reverted) continue;
+      try { if (!(await layout(it))) revert(it); } catch { revert(it); }
+    }
+    refresh();
+  };
+
+  // heavy shader work starts shortly before a heading scrolls into view
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    const it = items.find((x) => x.h === e.target);
+    if (!it) return;
+    it.seen = true;
+    start(it);
+    io.unobserve(e.target);
+  }), { rootMargin: '700px 0px' });
+
+  const ready = (async () => {
+    try {
+      await Promise.all(items.map((it) => {
+        const cs = getComputedStyle(it.h);
+        return document.fonts?.load(`${cs.fontWeight} 100px ${cs.fontFamily}`, 'Vishwa');
+      }));
+      await document.fonts?.ready;
+    } catch { /* system font fallback is fine */ }
+    await layoutAll();
+    items.forEach((it) => { if (!it.reverted) io.observe(it.h); });
+  })();
+
+  let timer = 0;
+  addEventListener('resize', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => ready.then(layoutAll), 160);
+  });
+}
+
 /* ═════════ Boot ═════════ */
 function boot() {
   gsap.registerPlugin(ScrollTrigger, Draggable);
   gsap.defaults({ ease: 'power4.out', duration: 1 });
   render();
-  // cursor ribbons in the portfolio's coral / peach palette
+  initMetalHeadings();
+  // cursor ribbons in the metallic silver / white palette
   window.Ribbons?.init({
-    colors: ['#FF8066', '#F2664A', '#FFB199'],
+    colors: ['#ffffff', '#a3a9b1', '#d9dde3'],
     thickness: 30, length: 1.4, shape: 'lens', spread: 18,
     stiffness: 0.5, bounce: 0.5, wave: 0, softness: 0, opacity: 1, fade: false,
   });
@@ -615,6 +813,7 @@ function boot() {
   initAchievements();
   initContact();
   initLoader(() => {
+    initHeroMetal();
     playHeroIntro();
     gsap.from('.nav', { y: -80, opacity: 0, duration: 1.1, delay: 0.3 });
     lenis?.start();

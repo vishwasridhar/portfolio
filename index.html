@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mohana Vishwa — Aspiring MERN Stack Developer</title>
   <meta name="description" content="Hi, I'm Mohana Vishwa, a BCA graduate and aspiring MERN Stack developer building responsive, user-friendly web interfaces." />
-  <meta name="theme-color" content="#FFF9F5" />
+  <meta name="theme-color" content="#000000" />
   <meta property="og:image" content="img/photos/portrait-hero.jpg" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 
@@ -61,8 +61,9 @@
       <div class="hr-grid">
         <div class="hr-copy">
           <p class="hr-hello hand">Hi there, I’m <span aria-hidden="true">👋</span></p>
-          <h1 class="hr-name">
+          <h1 class="hr-name" id="hero-name">
             <span class="hr-name-text">Vishwa</span>
+            <span class="hr-metal" id="hero-metal" aria-hidden="true"></span>
           </h1>
           <p class="hr-sub">
             <b>Aspiring MERN Stack developer</b>
@@ -221,6 +222,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
 
+  <script src="MetallicPaint.js"></script>
   <script src="Ribbons.js"></script>
   <script src="Script.js"></script>
 </body>
