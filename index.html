@@ -1,229 +1,361 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mohana Vishwa — Aspiring MERN Stack Developer</title>
-  <meta name="description" content="Hi, I'm Mohana Vishwa, a BCA graduate and aspiring MERN Stack developer building responsive, user-friendly web interfaces." />
-  <meta name="theme-color" content="#000000" />
-  <meta property="og:image" content="img/photos/portrait-hero.jpg" />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mohana Vishwa — Aspiring MERN Stack Developer</title>
+    <meta
+      name="description"
+      content="Hi, I'm Mohana Vishwa, a BCA graduate and aspiring MERN Stack developer building responsive, user-friendly web interfaces."
+    />
+    <meta name="theme-color" content="#000000" />
+    <meta property="og:image" content="img/photos/portrait-hero.jpg" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:opsz,wght@9..40,100..1000&family=Caveat:wght@500;700&display=swap" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:opsz,wght@9..40,100..1000&family=Caveat:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-  <!-- ═════════ Loader ═════════ -->
-  <div class="loader" role="status" aria-label="Loading">
-    <div class="ld-stack">
-      <span class="ld-bubble hand">hi, it’s Vishwa!</span>
-      <img class="ld-face" src="img/faces/smile.jpg" alt="" />
-      <div class="ld-bar"><i></i></div>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ═════════ Loader ═════════ -->
+    <div class="loader" role="status" aria-label="Loading">
+      <div class="ld-stack">
+        <span class="ld-bubble hand">Hi,Meet MR.Vishwa!</span>
+        <img class="ld-face" src="img/faces/smile.jpg" alt="" />
+        <div class="ld-bar"><i></i></div>
+      </div>
     </div>
-  </div>
 
-  <!-- ═════════ Nav ═════════ -->
-  <header class="nav">
-    <a href="#top" class="nav-brand">
-      <img src="img/faces/smile.jpg" alt="" />
-      <span>vishwa<em>.</em></span>
-    </a>
-    <nav class="nav-links" aria-label="Primary">
-      <a href="#about">About</a>
-      <a href="#work">Work</a>
-      <a href="#journey">Journey</a>
-      <a href="#skills">Toolbox</a>
-      <a href="#milestones">Milestones</a>
-      <a href="#achievements">Achievements</a>
-    </nav>
-    <a href="#contact" class="btn btn-coral nav-cta">Let’s chat <span>✦</span></a>
-    <button class="nav-burger" aria-expanded="false" aria-label="Menu"><i></i><i></i></button>
-    <div class="nav-sheet">
-      <a href="#about">About</a>
-      <a href="#work">Work</a>
-      <a href="#journey">Journey</a>
-      <a href="#skills">Toolbox</a>
-      <a href="#milestones">Milestones</a>
-      <a href="#achievements">Achievements</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </header>
+    <!-- ═════════ Nav ═════════ -->
+    <header class="nav">
+      <a href="#top" class="nav-brand">
+        <img src="img/faces/smile.jpg" alt="" />
+        <span>vishwa<em>.</em></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#journey">Journey</a>
+        <a href="#skills">Toolbox</a>
+        <a href="#milestones">Milestones</a>
+        <a href="#achievements">Achievements</a>
+      </nav>
+      <a href="#contact" class="btn btn-coral nav-cta"
+        >Let’s chat <span>✦</span></a
+      >
+      <button class="nav-burger" aria-expanded="false" aria-label="Menu">
+        <i></i><i></i>
+      </button>
+      <div class="nav-sheet">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#journey">Journey</a>
+        <a href="#skills">Toolbox</a>
+        <a href="#milestones">Milestones</a>
+        <a href="#achievements">Achievements</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </header>
 
-  <main>
+    <main>
+      <!-- ═════════ Hero ═════════ -->
+      <section class="hero" id="top">
+        <div class="hr-grid">
+          <div class="hr-copy">
+            <p class="hr-hello hand">
+              Hi there, I’m <span aria-hidden="true">👋</span>
+            </p>
+            <h1 class="hr-name" id="hero-name">
+              <span class="hr-name-text">Vishwa</span>
+              <span class="hr-metal" id="hero-metal" aria-hidden="true"></span>
+            </h1>
+            <p class="hr-sub">
+              <b>Aspiring MERN Stack developer</b>
+              <svg class="spark" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 0c.8 6.4 3.6 9.6 12 12-8.4 2.4-11.2 5.6-12 12-.8-6.4-3.6-9.6-12-12C8.4 9.6 11.2 6.4 12 0z"
+                />
+              </svg>
+              I build responsive, user-friendly web interfaces with HTML, CSS,
+              JavaScript, Bootstrap and Sass, and I’m growing into full-stack
+              with React, Node.js, Express and MongoDB.
+            </p>
+            <ul class="hr-counts" aria-label="Highlights" id="hero-counts"></ul>
+            <div class="hr-ctas">
+              <button class="btn btn-coral" data-goto="#work">
+                See my work <span>→</span>
+              </button>
+              <a
+                class="btn btn-line"
+                href="resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                >Résumé ↓</a
+              >
+            </div>
+          </div>
 
-    <!-- ═════════ Hero ═════════ -->
-    <section class="hero" id="top">
-      <div class="hr-grid">
-        <div class="hr-copy">
-          <p class="hr-hello hand">Hi there, I’m <span aria-hidden="true">👋</span></p>
-          <h1 class="hr-name" id="hero-name">
-            <span class="hr-name-text">Vishwa</span>
-            <span class="hr-metal" id="hero-metal" aria-hidden="true"></span>
-          </h1>
-          <p class="hr-sub">
-            <b>Aspiring MERN Stack developer</b>
-            <svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.8 6.4 3.6 9.6 12 12-8.4 2.4-11.2 5.6-12 12-.8-6.4-3.6-9.6-12-12C8.4 9.6 11.2 6.4 12 0z" /></svg>
-            I build responsive, user-friendly web interfaces with HTML, CSS, JavaScript, Bootstrap and Sass, and I’m growing into full-stack with React, Node.js, Express and MongoDB.
-          </p>
-          <ul class="hr-counts" aria-label="Highlights" id="hero-counts"></ul>
-          <div class="hr-ctas">
-            <button class="btn btn-coral" data-goto="#work">See my work <span>→</span></button>
-            <a class="btn btn-line" href="resume.pdf" target="_blank" rel="noreferrer">Résumé ↓</a>
+          <div class="hr-visual">
+            <div class="hr-blob"></div>
+            <canvas
+              class="hr-person"
+              id="look-canvas"
+              role="img"
+              aria-label="S. Mohana Vishwa"
+            ></canvas>
+            <div class="hr-note hand">
+              move your cursor,<br />I’ll look at it!
+              <svg class="hand-arrow" viewBox="0 0 120 80" aria-hidden="true">
+                <path d="M6 10 C 40 4, 86 18, 100 60" pathLength="1" />
+                <path d="M86 52 L 101 64 L 108 46" pathLength="1" />
+              </svg>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="hr-visual">
-          <div class="hr-blob"></div>
-          <canvas class="hr-person" id="look-canvas" role="img" aria-label="S. Mohana Vishwa"></canvas>
-          <div class="hr-note hand">
-            move your cursor,<br />I’ll look at it!
-            <svg class="hand-arrow" viewBox="0 0 120 80" aria-hidden="true">
-              <path d="M6 10 C 40 4, 86 18, 100 60" pathLength="1" />
-              <path d="M86 52 L 101 64 L 108 46" pathLength="1" />
+      <!-- ═════════ About ═════════ -->
+      <section class="about section tint" id="about">
+        <svg
+          class="wave"
+          data-wave
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z"
+          />
+        </svg>
+        <div class="wrap ab-grid">
+          <div
+            class="stack"
+            id="about-skills"
+            role="button"
+            tabindex="0"
+            aria-label="My skills: click to see the next skill"
+          ></div>
+          <div class="ab-copy">
+            <span class="pill">About me</span>
+            <h2 class="h2 ab-title">
+              A little <span class="hl">about me</span>
+            </h2>
+            <p class="lead">
+              Hi! I'm Mohana Vishwa, a BCA graduate from Chennai and an aspiring
+              MERN Stack developer with a foundation in front-end development
+              and UI/UX design.
+            </p>
+            <p class="lead">
+              I’m developing full-stack skills through structured learning and
+              hands-on projects, and I’m interested in creating user-friendly
+              web experiences and growing as a full-stack developer.
+            </p>
+            <div class="ab-stats" id="about-stats"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═════════ Work ═════════ -->
+      <section class="work section" id="work">
+        <svg
+          class="wave flip"
+          data-wave
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z"
+          />
+        </svg>
+        <div class="wrap">
+          <div class="sec-head">
+            <span class="pill">Selected work</span>
+            <h2 class="h2 wk-title">
+              Things I’ve <span class="hl">made</span>
+            </h2>
+            <p class="hand sec-note">scroll to tidy up the table ↓</p>
+          </div>
+          <div class="wk-cards" id="work-cards"></div>
+        </div>
+      </section>
+
+      <!-- ═════════ Journey ═════════ -->
+      <section class="journey section" id="journey">
+        <div class="wrap">
+          <div class="sec-head center">
+            <span class="pill">My journey</span>
+            <h2 class="h2 jr-title">
+              The story <span class="hl">so far</span>
+            </h2>
+            <p class="hand sec-note">follow the road ↓</p>
+          </div>
+          <ol class="jr-list" id="journey-list">
+            <svg class="jr-map" aria-hidden="true">
+              <path class="jr-road" id="jr-road"></path>
+              <path class="jr-trail" id="jr-trail"></path>
             </svg>
-          </div>
+            <span class="jr-walker" id="jr-walker" aria-hidden="true"
+              ><img src="img/faces/smile.jpg" alt=""
+            /></span>
+          </ol>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ═════════ About ═════════ -->
-    <section class="about section tint" id="about">
-      <svg class="wave" data-wave viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z" /></svg>
-      <div class="wrap ab-grid">
-        <div class="stack" id="about-skills" role="button" tabindex="0" aria-label="My skills: click to see the next skill"></div>
-        <div class="ab-copy">
-          <span class="pill">About me</span>
-          <h2 class="h2 ab-title">A little <span class="hl">about me</span></h2>
-          <p class="lead">Hi! I'm Mohana Vishwa, a BCA graduate from Chennai and an aspiring MERN Stack developer with a foundation in front-end development and UI/UX design.</p>
-          <p class="lead">I’m developing full-stack skills through structured learning and hands-on projects, and I’m interested in creating user-friendly web experiences and growing as a full-stack developer.</p>
-          <div class="ab-stats" id="about-stats"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═════════ Work ═════════ -->
-    <section class="work section" id="work">
-      <svg class="wave flip" data-wave viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z" /></svg>
-      <div class="wrap">
-        <div class="sec-head">
-          <span class="pill">Selected work</span>
-          <h2 class="h2 wk-title">Things I’ve <span class="hl">made</span></h2>
-          <p class="hand sec-note">scroll to tidy up the table ↓</p>
-        </div>
-        <div class="wk-cards" id="work-cards"></div>
-      </div>
-    </section>
-
-    <!-- ═════════ Journey ═════════ -->
-    <section class="journey section" id="journey">
-      <div class="wrap">
-        <div class="sec-head center">
-          <span class="pill">My journey</span>
-          <h2 class="h2 jr-title">The story <span class="hl">so far</span></h2>
-          <p class="hand sec-note">follow the road ↓</p>
-        </div>
-        <ol class="jr-list" id="journey-list">
-          <svg class="jr-map" aria-hidden="true">
-            <path class="jr-road" id="jr-road"></path>
-            <path class="jr-trail" id="jr-trail"></path>
-          </svg>
-          <span class="jr-walker" id="jr-walker" aria-hidden="true"><img src="img/faces/smile.jpg" alt="" /></span>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ═════════ Skills ═════════ -->
-    <section class="skills section tint" id="skills">
-      <svg class="wave flip" data-wave viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z" /></svg>
-      <div class="wrap">
-        <div class="sec-head sk-head">
-          <div>
-            <span class="pill">My toolbox</span>
-            <h2 class="h2 sk-title">Things I’m <span class="hl">good at</span></h2>
-          </div>
-          <div class="sk-side">
-            <p class="hand sec-note">psst, these stickers are draggable</p>
-            <button class="btn btn-line" id="shuffle-skills">Shuffle ✦</button>
-          </div>
-        </div>
-        <div class="sk-board" id="skill-board"></div>
-      </div>
-    </section>
-
-    <!-- ═════════ Milestones ═════════ -->
-    <section class="milestones section" id="milestones">
-      <svg class="wave flip" data-wave viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z" /></svg>
-      <div class="wrap">
-        <div class="sec-head center">
-          <span class="pill">Milestones</span>
-          <h2 class="h2">Learning &amp; <span class="hl">experience</span></h2>
-        </div>
-        <div class="ms-wall" id="cert-wall"></div>
-
-        <div class="sec-head center ms-nums-head">
-          <h2 class="h2">By the <span class="hl">numbers</span></h2>
-        </div>
-        <div class="nums" id="nums"></div>
-      </div>
-    </section>
-
-    <!-- ═════════ Achievements ═════════ -->
-    <section class="achievements section" id="achievements">
-      <div class="wrap">
-        <div class="sec-head center">
-          <span class="pill">Achievements</span>
-          <h2 class="h2">Moments I’m <span class="hl">proud of</span></h2>
-        </div>
-        <div class="ach-grid" id="ach-grid"></div>
-      </div>
-    </section>
-
-    <!-- ═════════ Contact ═════════ -->
-    <section class="contact section tint" id="contact">
-      <svg class="wave flip" data-wave viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z" /></svg>
-      <div class="wrap">
-        <div class="ct-card">
-          <div class="ct-copy">
-            <span class="pill pill-light">Contact</span>
-            <h2 class="h2">Let’s be<br />friends!</h2>
-            <p>Hiring, collaborating or just want to say hi? My inbox is always open.</p>
-            <div class="ct-mail">
-              <a id="ct-email" href="mailto:mohanaviswa2005@gmail.com">mohanaviswa2005@gmail.com</a>
-              <button id="copy-email">Copy</button>
+      <!-- ═════════ Skills ═════════ -->
+      <section class="skills section tint" id="skills">
+        <svg
+          class="wave flip"
+          data-wave
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z"
+          />
+        </svg>
+        <div class="wrap">
+          <div class="sec-head sk-head">
+            <div>
+              <span class="pill">My toolbox</span>
+              <h2 class="h2 sk-title">
+                Things I’m <span class="hl">good at</span>
+              </h2>
             </div>
-            <div class="ct-links">
-              <a class="btn btn-white" href="mailto:mohanaviswa2005@gmail.com?subject=Hi%20Vishwa!">Send an email ✉</a>
-              <a class="btn btn-ghost" href="https://github.com/vishwasridhar" target="_blank" rel="noreferrer">GitHub ↗</a>
-              <a class="btn btn-ghost" href="https://www.linkedin.com/in/vishwasridhar/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+            <div class="sk-side">
+              <p class="hand sec-note">psst, these stickers are draggable</p>
+              <button class="btn btn-line" id="shuffle-skills">
+                Shuffle ✦
+              </button>
             </div>
           </div>
-          <div class="ct-media">
-            <span class="ct-bubble hand">say hi! 👋</span>
-            <img class="ct-sticker" src="img/stickers/lg/f239.webp" alt="Vishwa smiling" loading="lazy" />
-          </div>
+          <div class="sk-board" id="skill-board"></div>
         </div>
-        <footer class="foot">
-          <span>© <span id="year">2026</span> S. Mohana Vishwa</span>
-          <button data-goto="#top">Back to top ↑</button>
-        </footer>
-      </div>
-    </section>
+      </section>
 
-  </main>
+      <!-- ═════════ Milestones ═════════ -->
+      <section class="milestones section" id="milestones">
+        <svg
+          class="wave flip"
+          data-wave
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z"
+          />
+        </svg>
+        <div class="wrap">
+          <div class="sec-head center">
+            <span class="pill">Milestones</span>
+            <h2 class="h2">
+              Learning &amp; <span class="hl">experience</span>
+            </h2>
+          </div>
+          <div class="ms-wall" id="cert-wall"></div>
 
-  <!-- Libraries (animation + smooth scroll) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+          <div class="sec-head center ms-nums-head">
+            <h2 class="h2">By the <span class="hl">numbers</span></h2>
+          </div>
+          <div class="nums" id="nums"></div>
+        </div>
+      </section>
 
-  <script src="MetallicPaint.js"></script>
-  <script src="Ribbons.js"></script>
-  <script src="Script.js"></script>
-</body>
+      <!-- ═════════ Achievements ═════════ -->
+      <section class="achievements section" id="achievements">
+        <div class="wrap">
+          <div class="sec-head center">
+            <span class="pill">Achievements</span>
+            <h2 class="h2">Moments I’m <span class="hl">proud of</span></h2>
+          </div>
+          <div class="ach-grid" id="ach-grid"></div>
+        </div>
+      </section>
+
+      <!-- ═════════ Contact ═════════ -->
+      <section class="contact section tint" id="contact">
+        <svg
+          class="wave flip"
+          data-wave
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 120 L0 64 C 180 10, 360 6, 540 40 S 900 112, 1080 76 S 1340 14, 1440 40 L1440 120 Z"
+          />
+        </svg>
+        <div class="wrap">
+          <div class="ct-card">
+            <div class="ct-copy">
+              <span class="pill pill-light">Contact</span>
+              <h2 class="h2">Let’s be<br />friends!</h2>
+              <p>
+                Hiring, collaborating or just want to say hi? My inbox is always
+                open.
+              </p>
+              <div class="ct-mail">
+                <a id="ct-email" href="mailto:mohanaviswa2005@gmail.com"
+                  >mohanaviswa2005@gmail.com</a
+                >
+                <button id="copy-email">Copy</button>
+              </div>
+              <div class="ct-links">
+                <a
+                  class="btn btn-white"
+                  href="mailto:mohanaviswa2005@gmail.com?subject=Hi%20Vishwa!"
+                  >Send an email ✉</a
+                >
+                <a
+                  class="btn btn-ghost"
+                  href="https://github.com/vishwasridhar"
+                  target="_blank"
+                  rel="noreferrer"
+                  >GitHub ↗</a
+                >
+                <a
+                  class="btn btn-ghost"
+                  href="https://www.linkedin.com/in/vishwasridhar/"
+                  target="_blank"
+                  rel="noreferrer"
+                  >LinkedIn ↗</a
+                >
+              </div>
+            </div>
+            <div class="ct-media">
+              <span class="ct-bubble hand">say hi! 👋</span>
+              <img
+                class="ct-sticker"
+                src="img/stickers/lg/f239.webp"
+                alt="Vishwa smiling"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          <footer class="foot">
+            <span>© <span id="year">2026</span> S. Mohana Vishwa</span>
+            <button data-goto="#top">Back to top ↑</button>
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <!-- Libraries (animation + smooth scroll) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+
+    <script src="MetallicPaint.js"></script>
+    <script src="Ribbons.js"></script>
+    <script src="Script.js"></script>
+  </body>
 </html>
