@@ -601,17 +601,22 @@ const metalLook = (el) => {
 };
 const fx = { ribbons: null, sparks: null, heroMetal: null, updateHeads: null };
 function startFx() {
-  fx.ribbons?.destroy?.();
-  fx.sparks?.destroy?.();
-  fx.ribbons = window.Ribbons?.init({
-    colors: fxColors(),
-    thickness: 30, length: 1.4, shape: 'lens', spread: 18,
-    stiffness: 0.5, bounce: 0.5, wave: 0, softness: 0, opacity: 1, fade: false,
-  }) || null;
-  fx.sparks = window.ClickSpark?.init({
-    sparkColor: fxColors(),
-    shape: 'line', sparkCount: 8, sparkSize: 14, sparkRadius: 30, sparkWidth: 2, duration: 500,
-  }) || null;
+  // separate try blocks: a problem with the cursor trail must never stop the click sparks (and vice versa)
+  try {
+    fx.ribbons?.destroy?.();
+    fx.ribbons = window.Ribbons?.init({
+      colors: fxColors(),
+      thickness: 30, length: 1.4, shape: 'lens', spread: 18,
+      stiffness: 0.5, bounce: 0.5, wave: 0, softness: 0, opacity: 1, fade: false,
+    }) || null;
+  } catch (err) { console.error('Ribbons', err); }
+  try {
+    fx.sparks?.destroy?.();
+    fx.sparks = window.ClickSpark?.init({
+      sparkColor: fxColors(),
+      shape: 'line', sparkCount: 8, sparkSize: 14, sparkRadius: 30, sparkWidth: 2, duration: 500,
+    }) || null;
+  } catch (err) { console.error('ClickSpark', err); }
 }
 function applyTheme(theme, save) {
   const root = document.documentElement;
@@ -854,11 +859,12 @@ function boot() {
   gsap.registerPlugin(ScrollTrigger, Draggable);
   gsap.defaults({ ease: 'power4.out', duration: 1 });
   render();
-  initMetalHeadings();
-  initTheme();
-  initPauseOffscreen();
-  // cursor ribbons + click sparks: green glitter in the light theme, silver / white in the dark one
-  startFx();
+  // each optional effect is isolated: if one fails on a device (e.g. WebGL on an older iPhone) the rest still run
+  const safe = (fn) => { try { fn(); } catch (err) { console.error(err); } };
+  safe(startFx);          // click sparks + cursor trail first, so nothing below can prevent them
+  safe(initTheme);
+  safe(initMetalHeadings);
+  safe(initPauseOffscreen);
   startScroll();
   initNav();
   initHero();

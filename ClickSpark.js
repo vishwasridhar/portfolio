@@ -214,75 +214,67 @@
       if (!raf) raf = requestAnimationFrame(frame);
     };
 
-    /* Taps: iOS Safari never fires "click" on the document for taps on non-interactive elements
-       (Android does), so touch is handled with pointer/touch events instead. A tap = finger down and up
-       close together in space and time; a drag/scroll does not spark. */
+    /* Works on every device. iOS Safari never sends "click" to the document for taps on non-interactive
+       elements (Android does), and its pointer events can be cancelled when a scroll starts, so every input
+       path is listened to at the same time and de-duplicated:
+         mouse    -> pointerdown / mousedown
+         touch    -> touchstart + touchend (always fired by iOS) and pointerdown + pointerup
+         keyboard -> click with detail 0
+       A tap = finger down and up close together in space and time; a drag / scroll does not spark. */
     let lastSpawn = { time: -1e9, x: 0, y: 0 };
+    const recentNear = (x, y) => performance.now() - lastSpawn.time < 700 && Math.hypot(x - lastSpawn.x, y - lastSpawn.y) < 28;
     const fire = (x, y) => {
+      if (recentNear(x, y)) return; // the same tap reported by another event type
       lastSpawn = { time: performance.now(), x, y };
       spawn(x, y);
     };
-    const recentNear = (x, y) => performance.now() - lastSpawn.time < 700 && Math.hypot(x - lastSpawn.x, y - lastSpawn.y) < 24;
-    let tap = null;
-    const TAP_MOVE = 12, TAP_MS = 600;
-    const begin = (x, y, id) => { tap = { x, y, id, t: performance.now() }; };
-    const finish = (x, y, id) => {
-      const t = tap; tap = null;
+    const TAP_MOVE = 14, TAP_MS = 700;
+    const taps = { pointer: null, touch: null }; // separate state per path so one cannot cancel the other
+    const down = (kind, x, y, id) => { taps[kind] = { x, y, id, t: performance.now() }; };
+    const up = (kind, x, y, id) => {
+      const t = taps[kind]; taps[kind] = null;
       if (!t || t.id !== id) return;
       if (performance.now() - t.t > TAP_MS || Math.hypot(x - t.x, y - t.y) > TAP_MOVE) return;
       fire(x, y);
     };
+    const drift = (kind, x, y) => { const t = taps[kind]; if (t && Math.hypot(x - t.x, y - t.y) > TAP_MOVE) taps[kind] = null; };
 
-    const onPointerDown = (e) => {
-      if (e.pointerType === 'mouse') { if (e.button === 0) fire(e.clientX, e.clientY); return; }
-      begin(e.clientX, e.clientY, e.pointerId);
+    const handlers = {
+      pointerdown: (e) => {
+        if (e.pointerType === 'mouse') { if (e.button === 0) fire(e.clientX, e.clientY); return; }
+        down('pointer', e.clientX, e.clientY, e.pointerId);
+      },
+      pointermove: (e) => { if (e.pointerType !== 'mouse') drift('pointer', e.clientX, e.clientY); },
+      pointerup: (e) => { if (e.pointerType !== 'mouse') up('pointer', e.clientX, e.clientY, e.pointerId); },
+      pointercancel: () => { taps.pointer = null; },
+      touchstart: (e) => {
+        const t = e.changedTouches && e.changedTouches[0];
+        if (t && e.touches.length === 1) down('touch', t.clientX, t.clientY, 'touch'); else taps.touch = null;
+      },
+      touchmove: (e) => { const t = e.changedTouches && e.changedTouches[0]; if (t) drift('touch', t.clientX, t.clientY); },
+      touchend: (e) => { const t = e.changedTouches && e.changedTouches[0]; if (t) up('touch', t.clientX, t.clientY, 'touch'); },
+      touchcancel: () => { taps.touch = null; },
+      mousedown: (e) => { if (e.button === 0) fire(e.clientX, e.clientY); },
+      click: (e) => {
+        if (e.detail === 0) { // keyboard-activated control: spark at its centre
+          const t = e.target instanceof Element ? e.target : document.body;
+          const r = t.getBoundingClientRect();
+          fire(r.left + r.width / 2, r.top + r.height / 2);
+          return;
+        }
+        fire(e.clientX, e.clientY); // ignored if a pointer/touch path already handled this tap
+      },
     };
-    const onPointerUp = (e) => { if (e.pointerType !== 'mouse') finish(e.clientX, e.clientY, e.pointerId); };
-    const onPointerCancel = () => { tap = null; };
-    // very old iOS without Pointer Events
-    const onTouchStart = (e) => { const t = e.changedTouches[0]; if (t && e.touches.length === 1) begin(t.clientX, t.clientY, 'touch'); };
-    const onTouchEnd = (e) => { const t = e.changedTouches[0]; if (t) finish(t.clientX, t.clientY, 'touch'); };
-    const onTouchMove = (e) => {
-      const t = e.changedTouches[0];
-      if (tap && t && Math.hypot(t.clientX - tap.x, t.clientY - tap.y) > TAP_MOVE) tap = null;
-    };
-    // keyboard-activated "clicks" and anything the pointer path missed
-    const onClick = (e) => {
-      if (e.detail === 0) {
-        const t = e.target instanceof Element ? e.target : document.body;
-        const r = t.getBoundingClientRect();
-        fire(r.left + r.width / 2, r.top + r.height / 2);
-        return;
-      }
-      if (!recentNear(e.clientX, e.clientY)) fire(e.clientX, e.clientY);
-    };
-
-    const opt = { passive: true };
-    const hasPointer = 'PointerEvent' in window;
-    if (hasPointer) {
-      document.addEventListener('pointerdown', onPointerDown, opt);
-      document.addEventListener('pointerup', onPointerUp, opt);
-      document.addEventListener('pointercancel', onPointerCancel, opt);
-    } else {
-      document.addEventListener('touchstart', onTouchStart, opt);
-      document.addEventListener('touchmove', onTouchMove, opt);
-      document.addEventListener('touchend', onTouchEnd, opt);
-      document.addEventListener('mousedown', (e) => { if (e.button === 0 && !recentNear(e.clientX, e.clientY)) fire(e.clientX, e.clientY); }, opt);
-    }
-    document.addEventListener('click', onClick, opt);
+    // window + capture: still reached when some widget (drag handles, smooth-scroll) stops propagation
+    const opt = { passive: true, capture: true };
+    Object.keys(handlers).forEach((type) => window.addEventListener(type, handlers[type], opt));
 
     return {
       setColors(list) { const c = list.filter(Boolean); if (c.length) s.colors = c; },
       spark: (x, y) => spawn(x == null ? innerWidth / 2 : x, y == null ? innerHeight / 2 : y),
       destroy() {
         cancelAnimationFrame(raf);
-        document.removeEventListener('pointerdown', onPointerDown);
-        document.removeEventListener('pointerup', onPointerUp);
-        document.removeEventListener('pointercancel', onPointerCancel);
-        document.removeEventListener('touchstart', onTouchStart);
-        document.removeEventListener('touchmove', onTouchMove);
-        document.removeEventListener('touchend', onTouchEnd);
-        document.removeEventListener('click', onClick);
+        Object.keys(handlers).forEach((type) => window.removeEventListener(type, handlers[type], opt));
         layer.remove();
       },
     };
