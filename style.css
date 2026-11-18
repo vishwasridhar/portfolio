@@ -656,3 +656,6 @@ html[data-theme="light"] .skill:hover { box-shadow: 0 0 22px -6px rgba(17, 160, 
 .sk-face:hover::after, .chips span:hover::after, .ab-stat:hover::after, .cert-frame:hover .cert-border::after, .polaroid-logo:hover::after,
 .art-dark:hover::after, .btn:hover::before, .ct-mail button:hover::before, .foot button:hover::before, .nav-burger:hover::before,
 .theme-toggle:hover::before { animation-duration: 2s; }
+
+/* taps on iOS: no grey flash, no text-selection callout while tapping around */
+html { -webkit-tap-highlight-color: transparent; }
