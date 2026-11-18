@@ -629,7 +629,7 @@ void main() {
     const resize = () => {
       const rect = container.getBoundingClientRect();
       const base = s.dpr ?? Math.min(window.devicePixelRatio || 1, 2);
-      let ratio = Math.max(base, 2);
+      let ratio = Math.max(base, o.minRatio || 2);
       const pixels = rect.width * rect.height * ratio * ratio;
       if (pixels > MAX_PIXELS) ratio *= Math.sqrt(MAX_PIXELS / pixels);
       const width = Math.max(1, Math.round(rect.width * ratio));
@@ -715,6 +715,9 @@ void main() {
     const frame = (now) => {
       state.raf = 0;
       if (!state.alive) return;
+      // cap the shimmer at ~30 fps: half the GPU/CPU work on 60 Hz+ screens, indistinguishable by eye
+      if (state.lastDraw && now - state.lastDraw < 30) { state.raf = requestAnimationFrame(frame); return; }
+      state.lastDraw = now;
       const dt = state.last ? Math.min(0.05, (now - state.last) / 1000) : 1 / 60;
       state.last = now;
       const moving = !s.paused && !reduce && s.speed !== 0;
@@ -815,6 +818,7 @@ void main() {
       gl.deleteVertexArray(vao);
       gl.deleteProgram(program);
       canvas.remove();
+      gl.getExtension('WEBGL_lose_context')?.loseContext(); // free the context so theme switches never hit the browser's limit
     };
 
     let active = true;
@@ -846,7 +850,15 @@ void main() {
       fail();
     }
 
-    return { destroy: dispose };
+    return {
+      destroy: dispose,
+      // change the look live (theme switch) without rebuilding anything: only uniforms change
+      update(next = {}) {
+        if (next.color != null) s.tint = parseColor(next.color, [1, 1, 1, 1]);
+        if (next.lightMode != null) s.lightMode = !!next.lightMode;
+        wake();
+      },
+    };
   }
 
   window.MetallicPaint = { init, measureText };

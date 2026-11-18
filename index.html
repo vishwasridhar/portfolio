@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,15 @@
       name="description"
       content="Hi, I'm Mohana Vishwa, a BCA graduate and aspiring MERN Stack developer building responsive, user-friendly web interfaces."
     />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#ffffff" />
+    <script>
+      /* light is the default; a saved choice wins. Runs before first paint. */
+      (function () {
+        var t = 'light';
+        try { t = localStorage.getItem('vishwa-theme') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
     <meta property="og:image" content="img/photos/portrait-hero.jpg" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 
@@ -27,7 +35,7 @@
     <div class="loader" role="status" aria-label="Loading">
       <div class="ld-stack">
         <span class="ld-bubble hand">Hi,Meet MR.Vishwa!</span>
-        <img class="ld-face" src="img/faces/smile.jpg" alt="" />
+        <img class="ld-face" fetchpriority="high" decoding="async" src="img/faces/smile.jpg" alt="" />
         <div class="ld-bar"><i></i></div>
       </div>
     </div>
@@ -46,6 +54,10 @@
         <a href="#milestones">Milestones</a>
         <a href="#achievements">Achievements</a>
       </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch theme">
+        <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M18.7 5.3l-1.8 1.8M7.1 16.9l-1.8 1.8"/></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.6 8.6 0 1 0 10.8 10.8z"/></svg>
+      </button>
       <a href="#contact" class="btn btn-coral nav-cta"
         >Let’s chat <span>✦</span></a
       >
@@ -202,7 +214,7 @@
               <path class="jr-trail" id="jr-trail"></path>
             </svg>
             <span class="jr-walker" id="jr-walker" aria-hidden="true"
-              ><img src="img/faces/smile.jpg" alt=""
+              ><img src="img/faces/lambo-removebg-preview.png" alt=""
             /></span>
           </ol>
         </div>
@@ -356,6 +368,7 @@
 
     <script src="MetallicPaint.js"></script>
     <script src="Ribbons.js"></script>
+    <script src="ClickSpark.js"></script>
     <script src="Script.js"></script>
   </body>
 </html>

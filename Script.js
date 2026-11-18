@@ -137,7 +137,7 @@ const DARK_BRANDS = new Set(['#0A0A0A', '#181717', '#000000']);
 function brandSVG(name, size = 22) {
   const b = BRANDS[name];
   if (!b) return '';
-  return `<svg class="brand" width="${size}" height="${size}" viewBox="0 0 24 24" role="img" aria-label="${esc(b.title)}"><path d="${b.path}" fill="${DARK_BRANDS.has(b.hex) ? '#ffffff' : b.hex}" /></svg>`;
+  return `<svg class="brand" width="${size}" height="${size}" viewBox="0 0 24 24" role="img" aria-label="${esc(b.title)}"><path d="${b.path}" fill="${DARK_BRANDS.has(b.hex) ? 'currentColor' : b.hex}" /></svg>`;
 }
 
 function odometer(value) {
@@ -586,21 +586,79 @@ function initContact() {
   });
 }
 
+/* ═════════ Theme (light default / dark) ═════════ */
+const THEME_KEY = 'vishwa-theme';
+const isLight = () => document.documentElement.getAttribute('data-theme') !== 'dark';
+// light = green glitter on white, dark = silver / white on black
+const FX_COLORS = { light: ['#0f9d63', '#2fe3a0', '#0a5c3b'], dark: ['#ffffff', '#a3a9b1', '#d9dde3'] };
+const fxColors = () => (isLight() ? FX_COLORS.light : FX_COLORS.dark);
+// liquid-metal look per theme; headings sitting on the dark glitter card keep the white chrome
+const metalLook = (el) => {
+  const light = isLight() && !(el && el.closest && el.closest('.ct-card'));
+  return light
+    ? { color: '#14c27f', lightMode: true, density: 2, softness: 0.1, dispersion: 0.3, distortion: 0.07, edgeBend: 0.6, angle: 70, speed: 1, mouseTilt: 0.5 }
+    : { color: '#ffffff', lightMode: false, density: 2, softness: 0.1, dispersion: 0.3, distortion: 0.07, edgeBend: 0.6, angle: 70, speed: 1, mouseTilt: 0.5 };
+};
+const fx = { ribbons: null, sparks: null, heroMetal: null, updateHeads: null };
+function startFx() {
+  fx.ribbons?.destroy?.();
+  fx.sparks?.destroy?.();
+  fx.ribbons = window.Ribbons?.init({
+    colors: fxColors(),
+    thickness: 30, length: 1.4, shape: 'lens', spread: 18,
+    stiffness: 0.5, bounce: 0.5, wave: 0, softness: 0, opacity: 1, fade: false,
+  }) || null;
+  fx.sparks = window.ClickSpark?.init({
+    sparkColor: fxColors(),
+    shape: 'line', sparkCount: 8, sparkSize: 14, sparkRadius: 30, sparkWidth: 2, duration: 500,
+  }) || null;
+}
+function applyTheme(theme, save) {
+  const root = document.documentElement;
+  root.setAttribute('data-theme', theme);
+  if (save) { try { localStorage.setItem(THEME_KEY, theme); } catch (e) { /* private mode */ } }
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#ffffff' : '#000000');
+  const btn = $('.theme-toggle');
+  if (btn) {
+    btn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+    btn.setAttribute('aria-pressed', String(theme === 'dark'));
+  }
+}
+function initPauseOffscreen() {
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle('is-paused', !e.isIntersecting)), { rootMargin: '120px 0px' });
+  $$('.hero, .wk-card, .ct-card, .sk-board, .num-cell, .btn, .ct-mail button, .foot button, .theme-toggle, .nav-burger, .pill, .jr-card, .ach-card, .sk-card, .sk-tile, .chips span, .ab-stat, .cert-border, .polaroid-logo, .art-dark').forEach((el) => io.observe(el));
+}
+function initTheme() {
+  applyTheme(isLight() ? 'light' : 'dark', false);
+  $('.theme-toggle')?.addEventListener('click', () => {
+    applyTheme(isLight() ? 'dark' : 'light', true);
+    // nothing is rebuilt on a switch: colours and shader uniforms are updated in place, so there is no lag
+    fx.ribbons?.setColors(fxColors());
+    fx.sparks?.setColors(fxColors());
+    const h1 = $('#hero-name');
+    fx.heroMetal?.update(metalLook(h1));
+    fx.updateHeads?.();
+  });
+}
+
 /* ═════════ Hero name: liquid-metal text ═════════ */
-function initHeroMetal() {
+function initHeroMetal(again) {
   const h1 = $('#hero-name');
   const host = $('#hero-metal');
   if (!h1 || !host || !window.MetallicPaint) return;
+  fx.heroMetal?.destroy?.();
+  host.querySelectorAll('canvas').forEach((c) => c.remove());
   h1.classList.add('metal-on');
   const metal = window.MetallicPaint.init(host, {
     text: 'Vishwa',
     fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
     fontWeight: 800,
-    color: '#ffffff',
-    density: 2, softness: 0.1, dispersion: 0.3, distortion: 0.07, edgeBend: 0.6,
-    angle: 70, scale: 0.95, speed: 1, mouseTilt: 0.5, intro: true,
-    onError: () => h1.classList.remove('metal-on'), // falls back to plain white text
+    ...metalLook(h1),
+    scale: 0.95, intro: !again,
+    onError: () => h1.classList.remove('metal-on'), // falls back to plain text
   });
+  fx.heroMetal = metal;
   if (!metal) h1.classList.remove('metal-on');
 }
 
@@ -609,10 +667,7 @@ function initHeroMetal() {
    WebGL liquid-metal shader as the hero "Vishwa": chrome bands, red/blue dispersion on the edges,
    a slow flowing shimmer and a tilt that follows the cursor. Each heading is word-wrapped here,
    rendered to its own canvas, and falls back to the old CSS gradient if WebGL2 isn't available. */
-const METAL_LOOK = {
-  color: '#ffffff', density: 2, softness: 0.1, dispersion: 0.3, distortion: 0.07, edgeBend: 0.6,
-  angle: 70, speed: 1, mouseTilt: 0.5, scale: 1,
-};
+const METAL_SCALE = 1;
 const METAL_LINE_HEIGHT = 0.98; // same as the .h2 line-height in style.css
 const METAL_SPACING = -0.02;    // em; a little tighter, like the CSS headings
 
@@ -681,7 +736,7 @@ function initMetalHeadings() {
     if (it.inst || it.reverted || !it.layout) return;
     const L = it.layout;
     it.inst = MP.init(it.host, {
-      ...METAL_LOOK, text: L.text, fontFamily: L.family, fontWeight: L.weight,
+      ...metalLook(it.h), scale: METAL_SCALE, minRatio: 1.5, text: L.text, fontFamily: L.family, fontWeight: L.weight,
       align: L.align, lineHeight: METAL_LINE_HEIGHT, letterSpacing: METAL_SPACING,
       intro: !it.started, onError: () => revert(it),
     });
@@ -782,6 +837,11 @@ function initMetalHeadings() {
     items.forEach((it) => { if (!it.reverted) io.observe(it.h); });
   })();
 
+  fx.updateHeads = () => items.forEach((it) => {
+    if (it.reverted || !it.inst) return;
+    it.inst.update(metalLook(it.h));
+  });
+
   let timer = 0;
   addEventListener('resize', () => {
     clearTimeout(timer);
@@ -795,12 +855,10 @@ function boot() {
   gsap.defaults({ ease: 'power4.out', duration: 1 });
   render();
   initMetalHeadings();
-  // cursor ribbons in the metallic silver / white palette
-  window.Ribbons?.init({
-    colors: ['#ffffff', '#a3a9b1', '#d9dde3'],
-    thickness: 30, length: 1.4, shape: 'lens', spread: 18,
-    stiffness: 0.5, bounce: 0.5, wave: 0, softness: 0, opacity: 1, fade: false,
-  });
+  initTheme();
+  initPauseOffscreen();
+  // cursor ribbons + click sparks: green glitter in the light theme, silver / white in the dark one
+  startFx();
   startScroll();
   initNav();
   initHero();

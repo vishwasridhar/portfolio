@@ -169,7 +169,7 @@ void main() {
 
     const state = {
       alive: true, raf: 0, last: 0, time: 0, width: 1, height: 1,
-      ribbons: [], mouseX: 0, mouseY: 0, accumulator: 0,
+      ribbons: [], mouseX: 0, mouseY: 0, accumulator: 0, lastMove: performance.now(),
     };
 
     const resize = () => {
@@ -329,10 +329,15 @@ void main() {
       state.accumulator += dt;
       while (state.accumulator >= STEP) { simulate(STEP); state.accumulator -= STEP; }
       draw();
+      // trails have settled once the pointer has been still for a few seconds: stop drawing until it moves again
+      if (performance.now() - state.lastMove > 3500) { state.last = 0; return; }
       state.raf = requestAnimationFrame(frame);
     };
 
-    const onMove = (e) => { state.mouseX = e.clientX; state.mouseY = e.clientY; };
+    const onMove = (e) => {
+      state.mouseX = e.clientX; state.mouseY = e.clientY; state.lastMove = performance.now();
+      if (!state.raf && state.alive) { state.last = 0; state.raf = requestAnimationFrame(frame); }
+    };
 
     resize();
     state.mouseX = state.width / 2;
@@ -345,6 +350,10 @@ void main() {
     state.raf = requestAnimationFrame(frame);
 
     return {
+      setColors(list) {
+        const next = list.slice(0, 12).map((c) => parseColor(c, [1, 1, 1, 1]));
+        if (next.length === state.ribbons.length) s.colors = next; // same ribbon count: swap colours in place
+      },
       destroy() {
         state.alive = false;
         cancelAnimationFrame(state.raf);

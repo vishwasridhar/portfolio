@@ -496,3 +496,163 @@ html { color-scheme: dark; }
 .mh-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 .mh-host { display: block; min-height: 1em; max-width: none; pointer-events: none; }
 .h2.mh-on > .squiggle { position: absolute; bottom: auto; right: auto; height: 0.26em; z-index: 1; }
+
+/* click sparks (full-page overlay, never blocks clicks) */
+.click-spark { position: fixed; inset: 0; pointer-events: none; }
+
+
+/* ════════════════════════════════════════════════════════════
+   Theme toggle (nav bar)
+   ════════════════════════════════════════════════════════════ */
+.theme-toggle {
+  position: relative; flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+  background: transparent; border: 0; color: var(--white); transition: transform 0.35s var(--ease), box-shadow 0.35s;
+}
+.theme-toggle::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px; pointer-events: none;
+  background: var(--metal); background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude;
+}
+.theme-toggle:hover { transform: rotate(14deg) scale(1.05); box-shadow: 0 0 26px -8px rgba(255, 255, 255, 0.4); }
+.theme-toggle:hover::before { animation: metal-shift 2.4s linear infinite; }
+.theme-toggle svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .ico-moon { display: block; }
+.theme-toggle .ico-sun { display: none; }
+html[data-theme="dark"] .theme-toggle .ico-moon { display: none; }
+html[data-theme="dark"] .theme-toggle .ico-sun { display: block; }
+
+
+/* ════════════════════════════════════════════════════════════
+   LIGHT THEME (default): white background, glitter-green text and effects.
+   Dark theme rules above are untouched; this block only applies to data-theme="light".
+   ════════════════════════════════════════════════════════════ */
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --ink: #083d29;
+  --white: #0a5c3b;            /* "text white" of the dark theme → deep glitter green */
+  --coral: #11a064;
+  --coral-d: #0a7a4c;
+  --peach: #e9f8f1;
+  --peach-2: #d3f1e2;
+  --card: #f4fcf8;
+  --muted: rgba(8, 61, 41, 0.7);
+  --line: rgba(10, 92, 59, 0.16);
+  --shadow: 0 18px 46px -20px rgba(8, 80, 50, 0.28), 0 2px 6px rgba(8, 80, 50, 0.08);
+  --shadow-coral: 0 18px 40px -14px rgba(17, 160, 100, 0.4);
+  --metal: linear-gradient(100deg, #0a5c3b 0%, #2fe3a0 12%, #0f9d63 24%, #c9fbe4 36%, #07452c 50%, #3eeab0 62%, #0d8a58 74%, #a8f3d3 86%, #0a5c3b 100%);
+}
+html[data-theme="light"] ::selection { background: rgba(47, 227, 160, 0.4); color: #05301f; }
+html[data-theme="light"] .loader { background: #fff; }
+html[data-theme="light"] .ld-bar { background: rgba(10, 92, 59, 0.14); }
+html[data-theme="light"] .ld-face { border-color: #fff; box-shadow: 0 0 0 3px #2fe3a0, var(--shadow); }
+html[data-theme="light"] .hero::before {
+  background: radial-gradient(60vw 50vh at 85% 30%, rgba(47, 227, 160, 0.2), transparent 70%), radial-gradient(40vw 40vh at 0% 100%, rgba(17, 160, 100, 0.1), transparent 70%);
+}
+html[data-theme="light"] .section.tint { --sec-bg: #f1fbf6; }
+html[data-theme="light"] .nav.is-open { background: rgba(255, 255, 255, 0.88); }
+html[data-theme="light"] .nav-brand img { border-color: #2fe3a0; }
+
+/* buttons + toggle glow */
+html[data-theme="light"] .btn:hover, html[data-theme="light"] .ct-mail button:hover, html[data-theme="light"] .foot button:hover,
+html[data-theme="light"] .nav-burger:hover, html[data-theme="light"] .theme-toggle:hover { box-shadow: 0 0 26px -8px rgba(17, 160, 100, 0.55); }
+
+/* hero: the glitter photo fills the arch behind the portrait */
+html[data-theme="light"] .hr-blob {
+  background: linear-gradient(rgba(4, 50, 32, 0.15), rgba(4, 50, 32, 0.15)), url('img/glitter.jpg') center / cover;
+  box-shadow: 0 30px 70px -40px rgba(8, 80, 50, 0.5);
+}
+html[data-theme="light"] .hr-blob::before { background: linear-gradient(135deg, #ffffff, #b9f7dc); opacity: 0.95; }
+html[data-theme="light"] .hr-visual::before { background: radial-gradient(circle, rgba(47, 227, 160, 0.3), rgba(47, 227, 160, 0) 65%); }
+html[data-theme="light"] .hr-person { filter: drop-shadow(0 26px 34px rgba(8, 80, 50, 0.35)); }
+
+/* cards / art / details */
+html[data-theme="light"] .wk-card:hover { box-shadow: 0 30px 70px -24px rgba(17, 160, 100, 0.4); }
+html[data-theme="light"] .wk-window { background: #e4f6ed !important; }
+html[data-theme="light"] .wk-art { background: rgba(255, 255, 255, 0.7); }
+html[data-theme="light"] .art-page .ln, html[data-theme="light"] .art-trip .ln { background: rgba(10, 92, 59, 0.18); }
+html[data-theme="light"] .art-tiles i { background: rgba(10, 92, 59, 0.14); }
+html[data-theme="light"] .art-tiles i:nth-child(2) { background: var(--coral); }
+html[data-theme="light"] .art-trip .pic { background: linear-gradient(135deg, #bff3da, #11a064); }
+html[data-theme="light"] .art-dark { background: #0a4d33; border-color: transparent; --white: #fff; --ink: #fff; }
+html[data-theme="light"] .art-dark .ln { background: rgba(255, 255, 255, 0.28); }
+html[data-theme="light"] .art-dark .art-tiles i { background: rgba(255, 255, 255, 0.2); }
+html[data-theme="light"] .art-dark .art-tiles i:nth-child(2) { background: #2fe3a0; }
+html[data-theme="light"] .art-chat.me, html[data-theme="light"] .art-trip b,
+html[data-theme="light"] .sk-card-tag, html[data-theme="light"] .tone-coral { background: #0f9d63; color: #fff; }
+html[data-theme="light"] .art-look .t { background: #0f9d63; }
+html[data-theme="light"] .art-look:nth-child(3) .b { background: #2fe3a0; }
+html[data-theme="light"] .art-ring .fg { stroke: #11a064; }
+html[data-theme="light"] .tone-ink { background: #0a4d33; color: #fff; }
+html[data-theme="light"] .skill { border-color: #2fe3a0; box-shadow: 0 10px 22px -12px rgba(8, 80, 50, 0.4); }
+html[data-theme="light"] .sk-board {
+  background-image: radial-gradient(rgba(17, 160, 100, 0.3) 1.5px, transparent 1.5px);
+  border-color: rgba(17, 160, 100, 0.45);
+}
+html[data-theme="light"] .jr-road { stroke: rgba(17, 160, 100, 0.4); }
+html[data-theme="light"] .jr-dot { border-color: #fff; box-shadow: 0 0 0 6px #bff3da; }
+html[data-theme="light"] .jr-walker { background: conic-gradient(#11a064, #8ff0c4, #11a064); box-shadow: 0 10px 24px -6px rgba(17, 160, 100, 0.6); }
+html[data-theme="light"] .jr-walker img { border-color: #fff; }
+html[data-theme="light"] .tape { background: rgba(47, 227, 160, 0.55); }
+html[data-theme="light"] .cert-border { background: #fbfffd; border-color: rgba(17, 160, 100, 0.5); outline-color: rgba(17, 160, 100, 0.3); }
+html[data-theme="light"] .cert-seal { background: #0f9d63; color: #fff; box-shadow: 0 0 0 4px #fff, 0 6px 14px -4px rgba(17, 160, 100, 0.6); }
+html[data-theme="light"] .ct-bubble { box-shadow: var(--shadow); }
+html[data-theme="light"] .brand { color: var(--white); }
+html[data-theme="dark"] .brand { color: #fff; }
+
+/* contact card: the glitter photo itself, white text */
+html[data-theme="light"] .ct-card {
+  --white: #ffffff; --ink: #ffffff; --muted: rgba(255, 255, 255, 0.85);
+  --metal: linear-gradient(100deg, #ffffff 0%, #8ff0c4 14%, #ffffff 30%, #2fe3a0 46%, #ffffff 62%, #8ff0c4 80%, #ffffff 100%);
+  background: linear-gradient(rgba(3, 40, 26, 0.55), rgba(3, 40, 26, 0.55)), url('img/glitter.jpg') center / cover;
+  color: #fff; box-shadow: 0 40px 90px -40px rgba(8, 80, 50, 0.6);
+}
+html[data-theme="light"] .ct-card::before { background: radial-gradient(50% 70% at 85% 100%, rgba(255, 255, 255, 0.14), transparent 70%); }
+html[data-theme="light"] .ct-card .btn:hover, html[data-theme="light"] .ct-card .ct-mail button:hover { box-shadow: 0 0 26px -8px rgba(255, 255, 255, 0.6); }
+html[data-theme="light"] .pill-light { background: rgba(255, 255, 255, 0.18); border-color: rgba(255, 255, 255, 0.5); color: #fff; }
+html[data-theme="light"] .foot .hand { color: var(--white); }
+html[data-theme="light"] .ct-bubble { color: #083d29; }
+html[data-theme="light"] .ct-bubble::after { background: var(--card); }
+
+
+/* ════════════════════════════════════════════════════════════
+   Animated metallic borders: every bordered box gets the same moving
+   gradient outline as the theme button (animates on hover / keyboard focus)
+   ════════════════════════════════════════════════════════════ */
+.pill, .wk-card, .jr-card, .ach-card, .sk-card, .sk-tile, .sk-face, .chips span, .ab-stat, .cert-border, .polaroid-logo, .art-dark {
+  position: relative; border: 1px solid transparent !important;
+}
+.pill::after, .wk-card::after, .jr-card::after, .ach-card::after, .sk-card::after, .sk-tile::after, .sk-face::after,
+.chips span::after, .ab-stat::after, .cert-border::after, .polaroid-logo::after, .art-dark::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
+  background: var(--metal); background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude;
+  opacity: 0.55; transition: opacity 0.35s;
+}
+.pill:hover::after, .wk-card:hover::after, .jr-card:hover::after, .ach-card:hover::after, .sk-card:hover::after, .sk-tile:hover::after,
+.sk-face:hover::after, .chips span:hover::after, .ab-stat:hover::after, .cert-frame:hover .cert-border::after, .polaroid-logo:hover::after,
+.art-dark:hover::after { opacity: 1; animation: metal-shift 2.4s linear infinite; }
+.skill { border-image: none; }
+.skill:hover { box-shadow: 0 0 22px -6px rgba(255, 255, 255, 0.35); }
+html[data-theme="light"] .skill:hover { box-shadow: 0 0 22px -6px rgba(17, 160, 100, 0.55); }
+.ct-card::after { animation-play-state: running; }
+
+/* performance: nothing animates while it is scrolled out of view */
+.is-paused, .is-paused *, .is-paused::before, .is-paused::after { animation-play-state: paused !important; }
+
+
+/* ════════════════════════════════════════════════════════════
+   Continuous border loop: the metallic outline keeps flowing on its own
+   (no hover needed). Off-screen boxes are paused by Script.js.
+   ════════════════════════════════════════════════════════════ */
+.pill::after, .wk-card::after, .jr-card::after, .ach-card::after, .sk-card::after, .sk-tile::after, .sk-face::after,
+.chips span::after, .ab-stat::after, .cert-border::after, .polaroid-logo::after, .art-dark::after,
+.btn::before, .ct-mail button::before, .foot button::before, .nav-burger::before, .theme-toggle::before {
+  opacity: 1; animation: metal-shift 5s linear infinite;
+}
+.pill:hover::after, .wk-card:hover::after, .jr-card:hover::after, .ach-card:hover::after, .sk-card:hover::after, .sk-tile:hover::after,
+.sk-face:hover::after, .chips span:hover::after, .ab-stat:hover::after, .cert-frame:hover .cert-border::after, .polaroid-logo:hover::after,
+.art-dark:hover::after, .btn:hover::before, .ct-mail button:hover::before, .foot button:hover::before, .nav-burger:hover::before,
+.theme-toggle:hover::before { animation-duration: 2s; }
